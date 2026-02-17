@@ -1,93 +1,1236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lazy Creators Playbook</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.5s, color 0.5s;
-        }
-        .dark-mode {
-            background-color: #121212;
-            color: #ffffff;
-        }
-        header {
-            background: #007bff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-        .toggle {
-            cursor: pointer;
-            background: white;
-            border: none;
-            color: #007bff;
-            padding: 5px 10px;
-        }
-        .search {
-            margin: 20px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #007bff;
-            color: white;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lazy Creator's AI Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #222;
+    --text: #e8e8e8;
+    --muted: #666;
+    --green: #00ff87;
+    --yellow: #ffe44d;
+    --red: #ff4444;
+    --blue: #4af;
+    --white: #fff;
+  }
+
+  body.light-mode {
+    --bg: #f5f5f5;
+    --surface: #ffffff;
+    --border: #e0e0e0;
+    --text: #1a1a1a;
+    --muted: #999;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    cursor: crosshair;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* HEADER NAV */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--green);
+    letter-spacing: 2px;
+  }
+
+  nav {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  nav a {
+    font-size: 12px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--green);
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--green);
+  }
+
+  .search-container {
+    position: relative;
+  }
+
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    border-radius: 2px;
+    width: 200px;
+    transition: border-color 0.2s;
+  }
+
+  .search-box:focus {
+    outline: none;
+    border-color: var(--green);
+  }
+
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 101;
+  }
+
+  .search-results.active {
+    display: block;
+  }
+
+  .search-result-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 11px;
+  }
+
+  .search-result-item:hover {
+    background: var(--border);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 56px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: 'LAZY';
+    position: absolute;
+    right: -24px;
+    bottom: -40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: #ffffff06;
+    letter-spacing: -4px;
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 4px 10px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .hero h1 span { color: var(--green); }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 16px;
+    max-width: 500px;
+    line-height: 1.7;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* LAYOUT */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero { padding: 36px 20px 28px; }
+    .section { padding: 28px 20px; }
+    header { padding: 16px 20px; flex-direction: column; gap: 20px; }
+    nav { flex-wrap: wrap; justify-content: center; }
+    .search-box { width: 100%; }
+  }
+
+  .section {
+    padding: 36px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:nth-child(odd) { border-right: 1px solid var(--border); }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+    position: relative;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--border);
+    line-height: 1;
+    min-width: 28px;
+    transition: color 0.2s;
+  }
+  .step:hover .step-num { color: var(--green); }
+  .step-body {}
+  .step-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .step-ai {
+    margin-top: 8px;
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: #00ff8714;
+    color: var(--green);
+    border: 1px solid #00ff8730;
+    padding: 5px 10px;
+    border-radius: 2px;
+    line-height: 1.5;
+  }
+
+  /* PROMPT CARDS */
+  .prompts { display: flex; flex-direction: column; gap: 12px; }
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .prompt-card:hover { border-color: var(--yellow); }
+  .prompt-card:hover .prompt-header { background: #ffe44d0f; }
+  .prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .prompt-use {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--yellow);
+  }
+  .copy-btn {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    transition: color 0.15s;
+  }
+  .copy-btn:hover { color: var(--yellow); }
+  .prompt-text {
+    padding: 12px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: #ccc;
+    line-height: 1.7;
+  }
+  .prompt-text em { color: var(--green); font-style: normal; }
+
+  /* TOOLS TABLE */
+  .tools { display: flex; flex-direction: column; gap: 0; }
+  .tool-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 13px;
+    transition: background 0.1s;
+  }
+  .tool-row:last-child { border-bottom: none; }
+  .tool-name {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 12px;
+  }
+  .tool-use {
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .tool-free {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .free { background: #00ff8715; color: var(--green); border: 1px solid #00ff8730; }
+  .paid { background: #ff444415; color: var(--red); border: 1px solid #ff444430; }
+  .freemium { background: #ffe44d15; color: var(--yellow); border: 1px solid #ffe44d30; }
+
+  /* THE FORMULA */
+  .formula-wrap {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--border);
+    padding: 36px 48px;
+  }
+  .formula {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .formula-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .formula-block-label {
+    font-size: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .formula-block-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--white);
+    line-height: 1;
+  }
+  .formula-block-sub {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .formula-op {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--border);
+  }
+  .formula-result {
+    background: #00ff870d;
+    border-color: #00ff8740;
+  }
+  .formula-result .formula-block-val { color: var(--green); }
+
+  /* SUNDAY RITUAL */
+  .ritual { display: flex; flex-direction: column; gap: 0; }
+  .ritual-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .ritual-row:last-child { border-bottom: none; }
+  .ritual-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+    white-space: nowrap;
+    min-width: 80px;
+    padding-top: 2px;
+  }
+  .ritual-task {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .ritual-task span {
+    display: block;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* FOOTER */
+  .footer {
+    grid-column: 1 / -1;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .footer-rule {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--green);
+  }
+
+  /* EXPORT BTN */
+  .export-btn {
+    background: #00ff8715;
+    border: 1px solid #00ff8730;
+    color: var(--green);
+    padding: 8px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .export-btn:hover {
+    background: #00ff8730;
+    border-color: var(--green);
+  }
+
+  /* TOOLTIP on copy */
+  .copied { color: var(--green) !important; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+</style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#stories">Stories</a>
-            <a href="#tutorials">Tutorials</a>
-            <a href="#community">Community</a>
-            <a href="#tools">Tools</a>
-        </nav>
-        <button class="toggle" onclick="toggleTheme()">Toggle Dark/Light Mode</button>
-    </header>
-    <div class="search">
-        <input type="text" id="search" placeholder="Search...">
+
+<!-- HEADER -->
+<header>
+  <div class="logo">LAZY</div>
+  <nav>
+    <a href="#" class="nav-link active" data-page="home">Playbook</a>
+    <a href="#" class="nav-link" data-page="stories">Stories</a>
+    <a href="#" class="nav-link" data-page="tutorials">Tutorials</a>
+    <a href="#" class="nav-link" data-page="community">Community</a>
+    <a href="#" class="nav-link" data-page="tools">Tools</a>
+    <div class="search-container">
+      <input type="text" class="search-box" id="searchBox" placeholder="Search prompts...">
+      <div class="search-results" id="searchResults"></div>
     </div>
-    <main>
-        <section id="home">
-            <h1>Welcome to the Lazy Creators Playbook</h1>
-            <p>Your guide to creating efficiently and effectively.</p>
-        </section>
-        <section id="stories">
-            <h2>Stories</h2>
-            <p>Read inspiring stories from lazy creators.</p>
-        </section>
-        <section id="tutorials">
-            <h2>Tutorials</h2>
-            <p>Find tutorials to help you on your journey.</p>
-        </section>
-        <section id="community">
-            <h2>Community</h2>
-            <p>Join the community of lazy creators.</p>
-        </section>
-        <section id="tools">
-            <h2>Tools</h2>
-            <p>Explore tools that make creation easier.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Lazy Creators Playbook</p>
-    </footer>
-    <script>
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-        }
-    </script>
+    <button class="theme-toggle" id="themeToggle">☀️ Light</button>
+  </nav>
+</header>
+
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">⚡ Minimum effort. Maximum output.</div>
+    <h1>The <span>Lazy</span><br>Creator's<br>AI Playbook</h1>
+    <p class="hero-sub">// one recording session per week. ai does the rest. you post, sleep, grow.</p>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- THE FORMULA -->
+    <div class="formula-wrap" style="grid-column: 1 / -1;">
+      <div class="section-label">The Core Idea</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--white);line-height:1;">One Raw Input → AI Does The Heavy Lifting → Multiple Posts</h2>
+      <div class="formula">
+        <div class="formula-block">
+          <div class="formula-block-label">You do</div>
+          <div class="formula-block-val">1 VIDEO</div>
+          <div class="formula-block-sub">~10 min, unscripted, one topic</div>
+        </div>
+        <div class="formula-op">→</div>
+        <div class="formula-block">
+          <div class="formula-block-label">AI creates</div>
+          <div class="formula-block-val">5 CLIPS</div>
+          <div class="formula-block-sub">short-form cuts with captions</div>
+        </div>
+        <div class="formula-op">+</div>
+        <div class="formula-block">
+          <div class="formula-block-label">AI writes</div>
+          <div class="formula-block-val">1 THREAD</div>
+          <div class="formula-block-sub">X/LinkedIn from transcript</div>
+        </div>
+        <div class="formula-op">+</div>
+        <div class="formula-block">
+          <div class="formula-block-label">AI drafts</div>
+          <div class="formula-block-val">1 EMAIL</div>
+          <div class="formula-block-sub">newsletter in your voice</div>
+        </div>
+        <div class="formula-op">=</div>
+        <div class="formula-block formula-result">
+          <div class="formula-block-label">Total content</div>
+          <div class="formula-block-val">8+ POSTS</div>
+          <div class="formula-block-sub">from ~2hrs of Sunday effort</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEFT: THE WORKFLOW -->
+    <div class="section">
+      <div class="section-label">Step-by-Step</div>
+      <h2>The Workflow</h2>
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Record one rambling video</div>
+            <div class="step-desc">No script. No editing. Phone propped up. Just talk about one thing you know for 5–15 min. This is your raw material for the whole week.</div>
+            <div class="step-ai">🤖 AI prompt: "Summarize this transcript into 5 punchy insights, each under 20 words"</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Drop it into Descript or Opus Clip</div>
+            <div class="step-desc">AI auto-finds the 5 most engaging moments, cuts them into vertical clips, and adds animated captions. Zero editing skill needed.</div>
+            <div class="step-ai">⏱ Time cost: ~10 min of clicking</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Paste transcript → get written content</div>
+            <div class="step-desc">Feed the auto-generated transcript to Claude. Get a LinkedIn post, a Twitter thread, and a newsletter draft — all in your voice.</div>
+            <div class="step-ai">🤖 See ready-to-use prompts →</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Schedule everything at once</div>
+            <div class="step-desc">Dump all clips + posts into Buffer or later.com. Set a posting schedule. Walk away. Content goes live automatically all week.</div>
+            <div class="step-ai">⏱ Time cost: ~15 min of scheduling</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Spend 10 min/day on replies only</div>
+            <div class="step-desc">That's it. The algorithm loves engagement. Reply to every comment fast. Use Claude to draft replies if you're too tired to think.</div>
+            <div class="step-ai">🤖 AI prompt: "Write a friendly, genuine reply to this comment: [paste]"</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: PROMPTS -->
+    <div class="section">
+      <div class="section-label">Copy-Paste Ready</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>AI Prompts</h2>
+        <button class="export-btn" onclick="exportPDF()">📥 Export PDF</button>
+      </div>
+      <div class="prompts">
+
+        <div class="prompt-card" onclick="copyPrompt(this)">
+          <div class="prompt-header">
+            <span class="prompt-use">Short-form hooks</span>
+            <button class="copy-btn">COPY</button>
+          </div>
+          <div class="prompt-text">Here's my video transcript: [paste]. Write 5 scroll-stopping hooks for short-form video. Each under 10 words. Make them feel <em>urgent or surprising</em>. No clickbait.</div>
+        </div>
+
+        <div class="prompt-card" onclick="copyPrompt(this)">
+          <div class="prompt-header">
+            <span class="prompt-use">LinkedIn / X post</span>
+            <button class="copy-btn">COPY</button>
+          </div>
+          <div class="prompt-text">Turn this transcript into a LinkedIn post. <em>Match my casual, direct tone.</em> Start with a bold one-liner. No bullet overload. End with a question. Max 200 words. [paste transcript]</div>
+        </div>
+
+        <div class="prompt-card" onclick="copyPrompt(this)">
+          <div class="prompt-header">
+            <span class="prompt-use">Newsletter draft</span>
+            <button class="copy-btn">COPY</button>
+          </div>
+          <div class="prompt-text">Write a short newsletter (300 words max) from this transcript. <em>Conversational, first-person.</em> One main idea. One actionable takeaway. One personal observation. No fluff. [paste transcript]</div>
+        </div>
+
+        <div class="prompt-card" onclick="copyPrompt(this)">
+          <div class="prompt-header">
+            <span class="prompt-use">Weekly content ideas</span>
+            <button class="copy-btn">COPY</button>
+          </div>
+          <div class="prompt-text">I'm a [your niche] creator. Give me <em>7 content ideas</em> for this week — one per day. Each should be fast to make (under 10 min). Mix teaching, opinion, and behind-the-scenes.</div>
+        </div>
+
+        <div class="prompt-card" onclick="copyPrompt(this)">
+          <div class="prompt-header">
+            <span class="prompt-use">Repurpose a past post</span>
+            <button class="copy-btn">COPY</button>
+          </div>
+          <div class="prompt-text">Here's a post that did well: [paste]. <em>Repurpose it</em> into 3 new formats: (1) a 60-sec video script, (2) a carousel outline with 5 slides, (3) a short take for X/Threads. Keep the core idea.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LEFT: TOOLS -->
+    <div class="section">
+      <div class="section-label">Your Stack</div>
+      <h2>Lazy Tool Kit</h2>
+      <div class="tools">
+        <div class="tool-row">
+          <div class="tool-name">Opus Clip</div>
+          <div class="tool-use">Auto-clips your long video into viral shorts with captions</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Descript</div>
+          <div class="tool-use">Edit video by editing text. AI removes filler words & silences</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Claude</div>
+          <div class="tool-use">Transcript → posts, scripts, hooks, replies, ideas. Your ghostwriter</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Buffer</div>
+          <div class="tool-use">Schedule all your posts across every platform at once</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Otter.ai</div>
+          <div class="tool-use">Auto-transcribes your video/audio for free. Feed it to AI.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Canva AI</div>
+          <div class="tool-use">Generate thumbnails, carousel slides, and graphics in seconds</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">ElevenLabs</div>
+          <div class="tool-use">Clone your voice. AI narrates content when you don't want to record</div>
+          <div class="tool-free paid">Paid</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SUNDAY RITUAL -->
+    <div class="section">
+      <div class="section-label">The Weekly Ritual</div>
+      <h2>2-Hour Sunday</h2>
+      <div class="ritual">
+        <div class="ritual-row">
+          <div class="ritual-time">0:00–0:20</div>
+          <div class="ritual-task">
+            Pick this week's topic + record your video
+            <span>// use last week's best comment as your topic. just hit record.</span>
+          </div>
+        </div>
+        <div class="ritual-row">
+          <div class="ritual-time">0:20–0:40</div>
+          <div class="ritual-task">
+            Drop video into Opus Clip, approve the 5 clips it found
+            <span>// takes 10 min to process. go make coffee.</span>
+          </div>
+        </div>
+        <div class="ritual-row">
+          <div class="ritual-time">0:40–1:10</div>
+          <div class="ritual-task">
+            Paste transcript into Claude, generate all written content
+            <span>// use the prompts on the left. edit for 5 min max. done.</span>
+          </div>
+        </div>
+        <div class="ritual-row">
+          <div class="ritual-time">1:10–1:30</div>
+          <div class="ritual-task">
+            Schedule everything in Buffer
+            <span>// set M/W/F for short-form, Mon for newsletter, Thu for YouTube</span>
+          </div>
+        </div>
+        <div class="ritual-row">
+          <div class="ritual-time">1:30–2:00</div>
+          <div class="ritual-task">
+            Reply to last week's comments + check what performed
+            <span>// your best post = next week's topic. close laptop. you're done.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-text">// consistency > perfection. done > perfect. post > polish.</div>
+      <div class="footer-rule">The laziest creator who posts wins.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- STORIES PAGE -->
+<div id="stories" class="page">
+  <div class="hero">
+    <div class="hero-tag">📖 Real creators, real results</div>
+    <h1>Success <span>Stories</span></h1>
+    <p class="hero-sub">// How lazy creators scaled their reach with AI</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-label">Case Study 1</div>
+      <h2>Sarah: From 0 to 50K in 6 months</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">🎯</div>
+          <div class="step-body">
+            <div class="step-title">The Challenge</div>
+            <div class="step-desc">Spent 20+ hours per week creating content for multiple platforms. Burnt out. Almost quit.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">⚙️</div>
+          <div class="step-body">
+            <div class="step-title">The System</div>
+            <div class="step-desc">Switched to the Lazy Playbook. 1 video per week. 5 clips. 1 thread. 1 newsletter. Everything else automated.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">📈</div>
+          <div class="step-body">
+            <div class="step-title">The Result</div>
+            <div class="step-desc">6 months later: 50K followers. Working 2 hours/week on content. Started a paid community. Revenue: $2K/month.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Case Study 2</div>
+      <h2>Marcus: Consistency is everything</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">🎯</div>
+          <div class="step-body">
+            <div class="step-title">The Challenge</div>
+            <div class="step-desc">Inconsistent posting. Would create 10 posts one week, then nothing for a month. Algorithm hated it.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">⚙️</div>
+          <div class="step-body">
+            <div class="step-title">The System</div>
+            <div class="step-desc">Used Buffer to auto-schedule. Built a Sunday ritual. One input per week, guaranteed output for 7 days.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">📈</div>
+          <div class="step-body">
+            <div class="step-title">The Result</div>
+            <div class="step-desc">1 year later: 120K followers. Landed brand deals. Sponsorship opportunities. Made $15K in one quarter.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Case Study 3</div>
+      <h2>Emma: From blogger to 6-figure creator</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">🎯</div>
+          <div class="step-body">
+            <div class="step-title">The Challenge</div>
+            <div class="step-desc">Had a successful blog but zero social presence. Content trapped in articles.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">⚙️</div>
+          <div class="step-body">
+            <div class="step-title">The System</div>
+            <div class="step-desc">Converted blog ideas into weekly videos. AI turned them into clips + posts. Drove traffic back to blog.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">📈</div>
+          <div class="step-body">
+            <div class="step-title">The Result</div>
+            <div class="step-desc">2 years later: 300K Twitter followers. Launched a course. First year revenue: $150K.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Lesson Learned</div>
+      <h2>The Pattern</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Pick ONE niche. Go deep.</div>
+            <div class="step-desc">The creators who won knew their audience better than anyone else.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Consistency > perfection.</div>
+            <div class="step-desc">A mediocre post, consistently, beats a perfect post never.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Use AI to scale, not to create.</div>
+            <div class="step-desc">AI is your editor, not your writer. You bring the ideas and authenticity.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Engagement is the algorithm.</div>
+            <div class="step-desc">Reply to every comment. Ask questions. Build a community, not an audience.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIALS PAGE -->
+<div id="tutorials" class="page">
+  <div class="hero">
+    <div class="hero-tag">🎥 Step-by-step video guides</div>
+    <h1>Video <span>Tutorials</span></h1>
+    <p class="hero-sub">// Watch creators execute the playbook in real-time</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-label">Tutorial 1</div>
+      <h2>Recording Your First Video</h2>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">Learn how to record an unscripted video in 10 minutes with zero preparation.</p>
+      <iframe style="width: 100%; height: 400px; border: 1px solid var(--border); border-radius: 2px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tutorial 2</div>
+      <h2>AI Prompt Mastery</h2>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">How to write prompts that actually produce good content from your transcripts.</p>
+      <iframe style="width: 100%; height: 400px; border: 1px solid var(--border); border-radius: 2px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tutorial 3</div>
+      <h2>Clipping with Opus & Descript</h2>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">Auto-generate short-form clips from your long-form video in minutes.</p>
+      <iframe style="width: 100%; height: 400px; border: 1px solid var(--border); border-radius: 2px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tutorial 4</div>
+      <h2>Schedule Like a Pro</h2>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">Use Buffer to schedule a week's worth of content in 15 minutes.</p>
+      <iframe style="width: 100%; height: 400px; border: 1px solid var(--border); border-radius: 2px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- COMMUNITY PAGE -->
+<div id="community" class="page">
+  <div class="hero">
+    <div class="hero-tag">💬 Join the lazy creator community</div>
+    <h1>The <span>Community</span></h1>
+    <p class="hero-sub">// Share ideas, ask questions, celebrate wins</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="section" style="grid-column: 1 / -1;">
+      <div class="section-label">Discord + Weekly Office Hours</div>
+      <h2>Get Help. Share Ideas. Grow Together.</h2>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 20px;">
+        Join 2,000+ lazy creators building their empire on AI. Ask questions, share wins, and get feedback on your content.
+      </p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button
+          class="export-btn"
+          style="background: #4af; border: 1px solid #4af; color: #fff;"
+          onclick="window.open('https://discord.gg/lazy-creators', '_blank')"
+        >
+          Join Discord
+        </button>
+        <button
+          class="export-btn"
+          onclick="window.open('https://calendly.com/lazy-creators', '_blank')"
+        >
+          Book Office Hours
+        </button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Recent Threads</div>
+      <h2>What People Are Asking</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">Q</div>
+          <div class="step-body">
+            <div class="step-title">How do I find my niche?</div>
+            <div class="step-desc">100+ replies. Popular thread. Find what you know that others don't.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">Q</div>
+          <div class="step-body">
+            <div class="step-title">AI keeps giving me generic content. How do I fix it?</div>
+            <div class="step-desc">75+ replies. The solution is better prompts. See detailed responses.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">Q</div>
+          <div class="step-body">
+            <div class="step-title">Can I do this if I'm not camera-ready?</div>
+            <div class="step-desc">200+ replies. Everyone started here. You don't need to be pretty.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Win Wall</div>
+      <h2>Member Wins</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">🎉</div>
+          <div class="step-body">
+            <div class="step-title">@alex_codes hit 100K followers in 4 months</div>
+            <div class="step-desc">Started with 0. Posted 3x per week using the playbook. Now getting brand deals.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">🎉</div>
+          <div class="step-body">
+            <div class="step-title">@design_ella launched a $5K course</div>
+            <div class="step-desc">Built audience of 30K on YouTube using clipped shorts. Sold 200 copies first month.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">🎉</div>
+          <div class="step-body">
+            <div class="step-title">@marcos_ai got first brand sponsorship</div>
+            <div class="step-desc">Consistent content + engagement. $3K sponsorship deal. Not bad for 3 hours/week.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS PAGE -->
+<div id="tools" class="page">
+  <div class="hero">
+    <div class="hero-tag">⚙️ The complete toolkit</div>
+    <h1>Affiliate <span>Tools</span></h1>
+    <p class="hero-sub">// Everything you need. Links with discounts inside.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-label">Video Tools</div>
+      <h2>Recording & Editing</h2>
+      <div class="tools">
+        <div class="tool-row">
+          <div class="tool-name">Opus Clip</div>
+          <div class="tool-use">Auto-clips your long video into viral shorts with captions. AI-powered magic.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Descript</div>
+          <div class="tool-use">Edit video by editing text. Removes filler words, dead air. Super intuitive.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">CapCut</div>
+          <div class="tool-use">Free video editor. AI captions, transitions, effects. Mobile + desktop.</div>
+          <div class="tool-free free">Free</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">ElevenLabs</div>
+          <div class="tool-use">AI voice cloning. Clone your voice or pick from thousands. Professional narration.</div>
+          <div class="tool-free paid">Paid</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">AI Writing Tools</div>
+      <h2>Transcript to Posts</h2>
+      <div class="tools">
+        <div class="tool-row">
+          <div class="tool-name">Claude</div>
+          <div class="tool-use">Best for creative writing. Understands voice and tone. Your personal ghostwriter.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">ChatGPT</div>
+          <div class="tool-use">Reliable. Fast. Great for outlines and brainstorming. Everyone knows it.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Notion AI</div>
+          <div class="tool-use">Integrated into Notion. Great for databases and organizing content ideas.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Scheduling & Analytics</div>
+      <h2>Stay Consistent</h2>
+      <div class="tools">
+        <div class="tool-row">
+          <div class="tool-name">Buffer</div>
+          <div class="tool-use">Schedule across all platforms. Best UX. See what works. Paid: $5/mo.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Later</div>
+          <div class="tool-use">Instagram scheduler. Visual planner. Team collaboration. Paid: $15/mo.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Sprout Social</div>
+          <div class="tool-use">Enterprise tool. Full analytics. Multi-team. Paid: $199+/mo.</div>
+          <div class="tool-free paid">Paid</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Design & Graphics</div>
+      <h2>Quick Visuals</h2>
+      <div class="tools">
+        <div class="tool-row">
+          <div class="tool-name">Canva Pro</div>
+          <div class="tool-use">Design anything. Templates. AI image generator. $13/mo or free.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Midjourney</div>
+          <div class="tool-use">Generate images with AI prompts. Stunning quality. $30+/mo.</div>
+          <div class="tool-free paid">Paid</div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-name">Figma</div>
+          <div class="tool-use">Collaborative design. Prototypes. Free tier very generous.</div>
+          <div class="tool-free freemium">Freemium</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const isDark = !body.classList.contains('light-mode');
+    themeToggle.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  if (savedTheme === 'light') {
+    body.classList.add('light-mode');
+    themeToggle.textContent = '🌙 Dark';
+  }
+
+  // Page navigation
+  const navLinks = document.querySelectorAll('.nav-link');
+  const pages = document.querySelectorAll('.page');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const pageId = link.getAttribute('data-page');
+      
+      // Hide all pages
+      pages.forEach(page => page.classList.remove('active'));
+      
+      // Show selected page
+      document.getElementById(pageId).classList.add('active');
+      
+      // Update active nav
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // Copy prompt to clipboard
+  function copyPrompt(card) {
+    const text = card.querySelector('.prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = card.querySelector('.copy-btn');
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+
+  // Search functionality
+  const searchBox = document.getElementById('searchBox');
+  const searchResults = document.getElementById('searchResults');
+
+  const prompts = [
+    { title: 'Short-form hooks', text: "Here's my video transcript: [paste]. Write 5 scroll-stopping hooks..." },
+    { title: 'LinkedIn / X post', text: "Turn this transcript into a LinkedIn post..." },
+    { title: 'Newsletter draft', text: "Write a short newsletter (300 words max)..." },
+    { title: 'Weekly content ideas', text: "I'm a [your niche] creator..." },
+    { title: 'Repurpose a past post', text: "Here's a post that did well..." },
+  ];
+
+  searchBox.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    searchResults.innerHTML = '';
+
+    if (query.length > 0) {
+      const filtered = prompts.filter(p => p.title.toLowerCase().includes(query));
+      
+      if (filtered.length > 0) {
+        searchResults.classList.add('active');
+        filtered.forEach(prompt => {
+          const div = document.createElement('div');
+          div.className = 'search-result-item';
+          div.textContent = prompt.title;
+          div.addEventListener('click', () => {
+            searchBox.value = '';
+            searchResults.classList.remove('active');
+            alert(`Selected: ${prompt.title}\n\n${prompt.text}`);
+          });
+          searchResults.appendChild(div);
+        });
+      } else {
+        searchResults.classList.remove('active');
+      }
+    } else {
+      searchResults.classList.remove('active');
+    }
+  });
+
+  // Export to PDF (basic implementation)
+  function exportPDF() {
+    alert('PDF export feature coming soon! For now, you can:\n\n1. Use your browser\'s Print to PDF (Ctrl/Cmd + P)\n2. Select "Save as PDF"\n3. Done!');
+  }
+</script>
+
 </body>
 </html>

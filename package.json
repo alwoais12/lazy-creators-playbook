@@ -1,0 +1,12 @@
+{
+  "name": "lazy-creators-playbook",
+  "version": "1.0.0",
+  "description": "The Lazy Creator's AI Playbook - Maximum output with minimum effort",
+  "scripts": {
+    "dev": "echo 'Static site - no dev server needed'",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["creator", "ai", "content", "automation"],
+  "author": "alwoais12",
+  "license": "MIT"
+}
