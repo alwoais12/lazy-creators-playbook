@@ -506,12 +506,6 @@
   <div class="logo">LAZY</div>
   <nav>
     <a href="#" class="nav-link active" data-page="home">Playbook</a>
-    <a href="#" class="nav-link" data-page="stories">Stories</a>
-    <a href="#" class="nav-link" data-page="tools">Tools</a>
-    <div class="search-container">
-      <input type="text" class="search-box" id="searchBox" placeholder="Search prompts...">
-      <div class="search-results" id="searchResults"></div>
-    </div>
     <button class="theme-toggle" id="themeToggle">☀️ Light</button>
   </nav>
 </header>
@@ -1183,46 +1177,6 @@
       }, 1800);
     });
   }
-
-  // Search functionality
-  const searchBox = document.getElementById('searchBox');
-  const searchResults = document.getElementById('searchResults');
-
-  const prompts = [
-    { title: 'Short-form hooks', text: "Here's my video transcript: [paste]. Write 5 scroll-stopping hooks..." },
-    { title: 'LinkedIn / X post', text: "Turn this transcript into a LinkedIn post..." },
-    { title: 'Newsletter draft', text: "Write a short newsletter (300 words max)..." },
-    { title: 'Weekly content ideas', text: "I'm a [your niche] creator..." },
-    { title: 'Repurpose a past post', text: "Here's a post that did well..." },
-  ];
-
-  searchBox.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    searchResults.innerHTML = '';
-
-    if (query.length > 0) {
-      const filtered = prompts.filter(p => p.title.toLowerCase().includes(query));
-      
-      if (filtered.length > 0) {
-        searchResults.classList.add('active');
-        filtered.forEach(prompt => {
-          const div = document.createElement('div');
-          div.className = 'search-result-item';
-          div.textContent = prompt.title;
-          div.addEventListener('click', () => {
-            searchBox.value = '';
-            searchResults.classList.remove('active');
-            alert(`Selected: ${prompt.title}\n\n${prompt.text}`);
-          });
-          searchResults.appendChild(div);
-        });
-      } else {
-        searchResults.classList.remove('active');
-      }
-    } else {
-      searchResults.classList.remove('active');
-    }
-  });
 
   // Export to PDF (basic implementation)
   function exportPDF() {
